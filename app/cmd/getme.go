@@ -53,13 +53,13 @@ func (c *GetMeCommand) Execute(_ []string) error {
 		log.Fatal(getme.Description)
 	}
 
-	color.Danger.Println("\nGETME COMMAND:\n")
+	color.Danger.Println("\n  GETME COMMAND:\n")
 	magenta := color.FgMagenta.Render
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.TabIndent)
-	fmt.Fprintf(w, "Id: \t%s\n", magenta(getme.Result.Id))
-	fmt.Fprintf(w, "Username: \t%s\n", magenta(getme.Result.Username))
-	fmt.Fprintf(w, "FirstName: \t%s\n", magenta(getme.Result.FirstName))
+	fmt.Fprintf(w, "  Id: \t%s\n", magenta(getme.Result.Id))
+	fmt.Fprintf(w, "  Username: \t%s\n", magenta(getme.Result.Username))
+	fmt.Fprintf(w, "  FirstName: \t%s\n", magenta(getme.Result.FirstName))
 	w.Flush()
 
 	return nil
