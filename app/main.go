@@ -1,19 +1,20 @@
 package main
 
 import (
-	"github.com/dnncomp/telega/app/cmd"
-	"github.com/umputun/go-flags"
 	"log"
 	"os"
+
+	"github.com/dnncomp/telega/app/cmd"
+	"github.com/umputun/go-flags"
 )
 
 // Opts with all cli commands and flags
 type Opts struct {
-	TokenCmd cmd.TokenCommand `command:"token" description:"get token"`
-	GetMeCmd cmd.GetMeCommand `command:"getme" description:"get bot info"`
+	TokenCmd   cmd.TokenCommand   `command:"token" description:"get token"`
+	BotInfoCmd cmd.BotInfoCommand `command:"botinfo" description:"get bot info"`
 
-	URL   string `long:"url" env:"URL" required:"true" default:"https://api.telegram.org" description:"telegram api URL"`
-	Token string `short:"t" long:"token" env:"TOKEN" required:"true" default:"XXXXXX" description:"bot token"`
+	URL   string `long:"url" env:"TELEGA_URL" required:"true" default:"https://api.telegram.org" description:"telegram api URL"`
+	Token string `short:"t" long:"token" env:"TELEGA_BOT_TOKEN" required:"true" default:"XXXXXX" description:"bot token"`
 }
 
 func main() {

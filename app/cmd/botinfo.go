@@ -3,7 +3,6 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gookit/color"
 	"io"
 	"log"
 	"net/http"
@@ -25,11 +24,11 @@ type GetMe struct {
 	Description string `json:"description"`
 }
 
-type GetMeCommand struct {
+type BotInfoCommand struct {
 	CommonOpts
 }
 
-func (c *GetMeCommand) Execute(_ []string) error {
+func (c *BotInfoCommand) Execute(_ []string) error {
 
 	url := c.URL + "/bot" + c.Token + "/getme"
 	res, err := http.Get(url)
@@ -37,29 +36,29 @@ func (c *GetMeCommand) Execute(_ []string) error {
 		log.Fatal(err)
 	}
 
-	json1, err := io.ReadAll(res.Body)
+	rb, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var getme GetMe
-	err = json.Unmarshal(json1, &getme)
+	var getMe GetMe
+	err = json.Unmarshal(rb, &getMe)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if getme.Ok != true {
-		log.Fatal(getme.Description)
+	if getMe.Ok != true {
+		log.Fatal(getMe.Description)
 	}
 
-	color.Danger.Println("\n  GETME COMMAND:\n")
-	magenta := color.FgMagenta.Render
+	fmt.Println("\nBOT INFO:")
+	fmt.Println("---------")
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.TabIndent)
-	fmt.Fprintf(w, "  Id: \t%s\n", magenta(getme.Result.Id))
-	fmt.Fprintf(w, "  Username: \t%s\n", magenta(getme.Result.Username))
-	fmt.Fprintf(w, "  FirstName: \t%s\n", magenta(getme.Result.FirstName))
+	fmt.Fprintf(w, "Id: \t%d\n", getMe.Result.Id)
+	fmt.Fprintf(w, "Username: \t%s\n", getMe.Result.Username)
+	fmt.Fprintf(w, "FirstName: \t%s\n\n", getMe.Result.FirstName)
 	w.Flush()
 
 	return nil
