@@ -10,8 +10,9 @@ import (
 
 // Opts with all cli commands and flags
 type Opts struct {
-	TokenCmd   cmd.TokenCommand   `command:"token" description:"get token"`
-	BotInfoCmd cmd.BotInfoCommand `command:"botinfo" description:"get bot info"`
+	TokenCmd    cmd.TokenCommand    `command:"token" description:"get token"`
+	BotInfoCmd  cmd.BotInfoCommand  `command:"botinfo" description:"get bot info"`
+	ChatInfoCmd cmd.ChatInfoCommand `command:"chatinfo" description:"get chat info"`
 
 	URL   string `long:"url" env:"TELEGA_URL" required:"true" default:"https://api.telegram.org" description:"telegram api URL"`
 	Token string `short:"t" long:"token" env:"TELEGA_BOT_TOKEN" required:"true" default:"XXXXXX" description:"bot token"`
