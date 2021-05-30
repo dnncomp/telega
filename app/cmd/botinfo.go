@@ -58,7 +58,7 @@ func (c *BotInfoCommand) Execute(_ []string) error {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.TabIndent)
 	fmt.Fprintf(w, "Id: \t%d\n", getMe.Result.Id)
 	fmt.Fprintf(w, "Username: \t%s\n", getMe.Result.Username)
-	fmt.Fprintf(w, "FirstName: \t%s\n\n", getMe.Result.FirstName)
+	fmt.Fprintf(w, "FirstName: \t%s\n", getMe.Result.FirstName)
 	w.Flush()
 
 	return nil
