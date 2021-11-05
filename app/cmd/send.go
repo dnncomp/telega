@@ -3,9 +3,7 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -45,19 +43,18 @@ type SendCommand struct {
 }
 
 func (c *SendCommand) Execute(_ []string) error {
-	err := Send(c.URL, c.Token, c.Cid, c.Message)
+	err := Send(c)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func Send(url, token, cid, message string) error {
+func Send(c *SendCommand) error {
+	url, token, cid, message := c.URL, c.Token, c.Cid, c.Message
 
 	url = url + "/bot" + token + "/sendMessage"
-
 	text := strings.Replace(message, "\\n", "\n", -1)
-	text = OK + "  " + text
 
 	payload, err := json.Marshal(
 		map[string]string{
@@ -75,25 +72,26 @@ func Send(url, token, cid, message string) error {
 
 	res, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		c.Log.Fatal(err)
 	}
 
 	rb, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		c.Log.Fatal(err)
 	}
 
 	var m Message
 	err = json.Unmarshal(rb, &m)
 	if err != nil {
-		log.Fatal(err)
+		c.Log.Fatal(err)
 	}
 
 	if m.Ok != true {
-		log.Fatal(m.Description)
+		c.Log.Fatal(m.Description)
 	}
 
-	fmt.Println("  MessageId:", m.Result.MessageId)
+	c.Log.Printf("[DEBUG] From: %s, MessageId: %d, Text: \"%s\"",
+		m.Result.From.FirstName, m.Result.MessageId, m.Result.Text)
 	return nil
 }

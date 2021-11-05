@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"log"
 	"strings"
 )
+
+var Log *log.Logger
 
 // CommonOptionsCommander extends flags.Commander with SetCommon
 // All commands should implement this interfaces
@@ -15,6 +18,7 @@ type CommonOptionsCommander interface {
 type CommonOpts struct {
 	URL   string
 	Token string
+	Log   *log.Logger
 }
 
 // SetCommon satisfies CommonOptionsCommander interface and sets common option fields
@@ -22,4 +26,5 @@ type CommonOpts struct {
 func (c *CommonOpts) SetCommon(commonOpts CommonOpts) {
 	c.URL = strings.TrimSuffix(commonOpts.URL, "/") // allow URL with trailing /
 	c.Token = commonOpts.Token
+	c.Log = commonOpts.Log
 }
