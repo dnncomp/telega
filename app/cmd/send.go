@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	SOS = "\xF0\x9F\x86\x98"
-	OK  = "\xE2\x9C\x85"
-	EYE = "\xF0\x9F\x91\x80"
+	OK   = "\xF0\x9F\x86\x97"
+	SOS  = "\xF0\x9F\x86\x98"
+	CHEK = "\xE2\x9C\x85"
+	EYE  = "\xF0\x9F\x91\x80"
 )
 
 type Message struct {
@@ -55,6 +56,10 @@ func Send(c *SendCommand) error {
 
 	url = url + "/bot" + token + "/sendMessage"
 	text := strings.Replace(message, "\\n", "\n", -1)
+	text = strings.Replace(text, "%F0%9F%86%97", OK, -1)
+	text = strings.Replace(text, "%F0%9F%86%98", SOS, -1)
+	text = strings.Replace(text, "%E2%9C%85", CHEK, -1)
+	text = strings.Replace(text, "%F0%9F%91%80", EYE, -1)
 
 	payload, err := json.Marshal(
 		map[string]string{
