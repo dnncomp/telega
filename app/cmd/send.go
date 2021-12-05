@@ -39,6 +39,7 @@ type Message struct {
 type SendCommand struct {
 	Cid     string `short:"c" long:"cid" env:"TELEGA_CHAT_ID" required:"true" description:"chat id"`
 	Message string `short:"m" long:"message" required:"true" default:"hi" description:"text message"`
+	Silent  bool   `short:"s" long:"silent" env:"SILENT" description:"silent mode"`
 
 	CommonOpts
 }
@@ -61,10 +62,17 @@ func Send(c *SendCommand) error {
 	text = strings.Replace(text, "%E2%9C%85", CHEK, -1)
 	text = strings.Replace(text, "%F0%9F%91%80", EYE, -1)
 
+	// Init logger
+	silentStr := "false"
+	if c.Silent {
+		silentStr = "true"
+	}
+
 	payload, err := json.Marshal(
 		map[string]string{
-			"chat_id": cid,
-			"text":    text,
+			"chat_id":              cid,
+			"text":                 text,
+			"disable_notification": silentStr,
 			//"parse_mode": "Markdown",
 			//"parse_mode": "MarkdownV2",
 			"parse_mode": "HTML",
